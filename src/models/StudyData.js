@@ -53,6 +53,14 @@ const taskSchema = new mongoose.Schema({
   note: { type: String, default: "" }
 }, { _id: true });
 
+const scheduleSchema = new mongoose.Schema({
+  date: { type: String, required: true },
+  shift: { type: String, enum: ["Morning", "Night"], default: "Morning" },
+  title: { type: String, required: true },
+  duration: { type: Number, required: true, min: 1, max: 1440 },
+  completed: { type: Boolean, default: false }
+}, { _id: true });
+
 const studyDataSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true, index: true },
   topics: { type: [topicSchema], default: [] },
@@ -60,7 +68,8 @@ const studyDataSchema = new mongoose.Schema({
   revisions: { type: [revisionSchema], default: [] },
   pyqs: { type: [pyqSchema], default: [] },
   mocks: { type: [mockSchema], default: [] },
-  tasks: { type: [taskSchema], default: [] }
+  tasks: { type: [taskSchema], default: [] },
+  schedules: { type: [scheduleSchema], default: [] }
 }, { timestamps: true });
 
 export default mongoose.model("StudyData", studyDataSchema);
